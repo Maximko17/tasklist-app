@@ -4,11 +4,9 @@ import com.example.tasklist.domain.exception.ResourceNotFoundException;
 import com.example.tasklist.domain.task.Status;
 import com.example.tasklist.domain.task.Task;
 import com.example.tasklist.domain.task.TaskImage;
-import com.example.tasklist.domain.user.User;
 import com.example.tasklist.repository.TaskRepository;
 import com.example.tasklist.service.ImageService;
 import com.example.tasklist.service.TaskService;
-import com.example.tasklist.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -23,7 +21,6 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
-    private final UserService userService;
     private final ImageService imageService;
 
     @Override
@@ -58,9 +55,7 @@ public class TaskServiceImpl implements TaskService {
     public Task create(final Task task, final Long userId) {
         task.setStatus(Status.TODO);
         taskRepository.save(task);
-        User user = userService.getById(userId);
-        user.getTasks().add(task);
-        userService.update(user);
+        taskRepository.assignTask(userId, task.getId());
         return task;
     }
 
