@@ -110,11 +110,7 @@ public class ApplicationConfig {
                                 })
                 )
                 .authorizeHttpRequests(configurer ->
-                        configurer.requestMatchers("/api/v1/auth/**")
-                                .permitAll()
-                                .requestMatchers("/swagger-ui/**")
-                                .permitAll()
-                                .requestMatchers("/v3/api-docs/**")
+                        configurer.requestMatchers("/api/v1/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/graphiql")
                                 .permitAll()
                                 .anyRequest().authenticated())
                 .anonymous(AbstractHttpConfigurer::disable)
